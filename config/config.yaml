@@ -1,0 +1,30 @@
+model:
+  weights_path: models/weights/yolov8n.pt
+  confidence_threshold: 0.5
+  nms_threshold: 0.45
+  image_size: 640
+  device: cpu
+
+camera:
+  source: 0
+  width: 1280
+  height: 720
+  fps: 30
+
+classes:
+  names: []
+
+logging:
+  database_path: logs/detections.db
+  snapshot_dir: snapshots/
+  snapshot_confidence_threshold: 0.85
+  enable_snapshots: true
+
+alerts:
+  enable_desktop_notifications: true
+  alert_confidence_threshold: 0.85
+  cooldown_seconds: 10
+
+dashboard:
+  host: 0.0.0.0
+  port: 8501
