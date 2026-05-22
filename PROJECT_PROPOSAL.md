@@ -41,7 +41,7 @@ detections to a database, and displays live statistics on a web dashboard.
 
 ## Data Collection
 Images will be collected using a laptop webcam under varied lighting
-conditions, angles, distances, and backgrounds. Target: 250–300 images
+conditions, angles, distances, and backgrounds. Target: approx 200 images
 per class, totalling approximately 1,250–1,500 images.
 
 ---
