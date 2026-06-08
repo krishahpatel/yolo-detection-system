@@ -4,8 +4,8 @@ model = YOLO("yolov8n.pt")
 
 model.train(
     data="data/splits/data.yaml",
-    epochs=30,
+    epochs=20,
     imgsz=640,
     batch=8,
-    name="workspace_v1"
+    name="workspace_v3"
 )
