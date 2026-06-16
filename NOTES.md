@@ -56,7 +56,6 @@ YOLO maps class IDs to readable object names using the COCO class dictionary.
 
 # Training Run v1 — workspace_v1
 
-**Date:** 2026-05-22
 **Epochs:** 30
 **Training Time:** 6.03 hours on CPU (Intel i7-8665U)
 **Base Weights:** `yolov8n.pt`
@@ -174,6 +173,225 @@ in the remaining weeks of the project.
 | Last weights | `runs/detect/workspace_v1/weights/last.pt` |
 | Training plots | `runs/detect/workspace_v1/` |
 | Config used | `config/config.yaml` |
+
+---
+
+
+# Training Run v2 — new_workspace
+
+**Epochs:** 20
+**Training Time:** 6.04 hours on CPU (Intel i7-8665U)
+**Base Weights:** `yolov8n.pt`
+**Image Size:** 640
+**Batch Size:** 8
+
+---
+
+## Dataset Changes from v1
+
+The v2 dataset was created by merging multiple datasets and re-splitting into a unified train/validation/test structure.
+
+### Improvements
+
+* Added additional person images.
+* Added a second notebook dataset containing different notebook designs.
+* Increased overall dataset diversity.
+* Rebuilt train/validation/test splits after merging all datasets.
+* Maintained class mapping:
+
+| Class ID | Class Name |
+| -------- | ---------- |
+| 0        | cup        |
+| 1        | laptop     |
+| 2        | notebook   |
+| 3        | person     |
+| 4        | phone      |
+
+---
+
+## Overall Results
+
+| Metric       | Value |
+| ------------ | ----- |
+| Precision    | 0.892 |
+| Recall       | 0.810 |
+| mAP@0.5      | 0.863 |
+| mAP@0.5:0.95 | 0.629 |
+
+---
+
+## Comparison with v1
+
+| Metric       | v1    | v2    | Change |
+| ------------ | ----- | ----- | ------ |
+| Precision    | 0.863 | 0.892 | +0.029 |
+| Recall       | 0.788 | 0.810 | +0.022 |
+| mAP@0.5      | 0.853 | 0.863 | +0.010 |
+| mAP@0.5:0.95 | 0.602 | 0.629 | +0.027 |
+
+Overall performance improved across all primary evaluation metrics.
+
+---
+
+## Per-Class Performance
+
+| Class    | Precision | Recall | mAP@0.5 | Assessment  |
+| -------- | --------- | ------ | ------- | ----------- |
+| cup      | 0.968     | 0.930  | 0.959   | Excellent   |
+| laptop   | 0.853     | 0.647  | 0.758   | Improved    |
+| notebook | 0.922     | 0.931  | 0.958   | Excellent   |
+| person   | 0.773     | 0.631  | 0.682   | Challenging |
+| phone    | 0.945     | 0.912  | 0.958   | Excellent   |
+
+---
+
+## Validation Results
+
+Validation performed on:
+
+* Images: 327
+* Instances: 451
+
+Final validation metrics:
+
+| Metric       | Value |
+| ------------ | ----- |
+| Precision    | 0.892 |
+| Recall       | 0.810 |
+| mAP@0.5      | 0.863 |
+| mAP@0.5:0.95 | 0.629 |
+
+---
+
+## Confusion Matrix Analysis
+
+The confusion matrix showed:
+
+* Cup learned correctly.
+* Laptop learned correctly.
+* Notebook learned correctly.
+* Person learned correctly.
+* Phone learned correctly.
+
+Very little class confusion was observed.
+
+Conclusions:
+
+* Class mappings are correct.
+* Labels are consistent.
+* Training pipeline is functioning correctly.
+* No evidence of systematic annotation errors.
+
+---
+
+## Real-World Webcam Testing
+
+After training, the model was tested using a live webcam feed.
+
+### Successful Cases
+
+* Cup detection generally reliable.
+* Phone detection reliable in many scenarios.
+* Laptop detection improved compared to v1.
+* Person detection works under good lighting conditions.
+
+### Observed Limitations
+
+#### Person
+
+Performance drops when:
+
+* Person occupies a small portion of the frame.
+* Lighting conditions are poor.
+* Unusual poses are present.
+
+#### Phone
+
+Occasional false positives:
+
+Examples:
+
+* Hand detected as phone.
+* Notebook detected as phone.
+
+#### Laptop
+
+Occasional false positives:
+
+Examples:
+
+* Wardrobe detected as laptop.
+* Furniture detected as laptop.
+
+#### Notebook
+
+Although notebook achieved excellent validation metrics, real-world performance remained inconsistent across different notebook designs, viewing angles, and backgrounds.
+
+This indicates a dataset diversity and generalization limitation rather than a labeling or training issue.
+
+---
+
+## Observations
+
+### Positive Outcomes
+
+* Overall metrics improved compared to v1.
+* Phone recall improved significantly.
+* Laptop precision improved significantly.
+* Dataset merge process was successful.
+* Model convergence remained stable throughout training.
+
+### Remaining Challenges
+
+* Person remains the most difficult class.
+* Notebook generalization remains inconsistent in real-world testing.
+* Additional laptop and notebook diversity could further improve robustness.
+
+---
+
+## Decision
+
+Proceeding with v2 weights for deployment and pipeline development.
+
+Deployment model:
+
+models/weights/best_v2_map863.pt
+
+The notebook and person limitations are documented as known constraints and do not prevent progression to the system integration phase.
+
+---
+
+## Conclusion
+
+The v2 model achieved the best performance of the project so far.
+
+Compared to v1:
+
+* Higher precision.
+* Higher recall.
+* Higher mAP@0.5.
+* Higher mAP@0.5:0.95.
+
+The model demonstrates sufficient accuracy for integration into the workspace monitoring pipeline, logging system, snapshot module, and dashboard application.
+
+Future improvements may include:
+
+* Additional notebook datasets with greater visual diversity.
+* More person images in realistic workspace environments.
+* Hard-negative images for reducing laptop and phone false positives.
+* Training larger YOLO variants such as `yolov8s.pt`.
+* Deployment testing on edge devices.
+
+---
+
+## Artifacts
+
+| File           | Path                                        |
+| -------------- | ------------------------------------------- |
+| Best weights   | `models/weights/best_v2_map863.pt`          |
+| Last weights   | `runs/detect/new_workspace/weights/last.pt` |
+| Training plots | `runs/detect/new_workspace/`                |
+| Config used    | `data/splits/data.yaml`                     |
 
 ---
 

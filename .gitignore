@@ -11,3 +11,6 @@ data/splits/
 *.db
 .env
 .DS_Store
+assets/*.jpg
+assets/*.jpeg
+assets/*.png
