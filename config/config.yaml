@@ -1,6 +1,6 @@
 model:
   weights_path: models/weights/best_v2_map863.pt
-  confidence_threshold: 0.5
+  confidence_threshold: 0.25
   nms_threshold: 0.45
   image_size: 640
   device: cpu
@@ -9,7 +9,6 @@ camera:
   source: 0
   width: 1280
   height: 720
-  fps: 30
 
 logging:
   database_path: logs/detections.db
