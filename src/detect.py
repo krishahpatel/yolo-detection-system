@@ -5,6 +5,8 @@ import cv2
 import yaml
 import time
 
+from snapshots import SnapshotManager
+
 from logger import DetectionLogger
 
 
@@ -31,6 +33,10 @@ class Detector:
 
         self.logger = DetectionLogger(
             self.config["logging"]["database_path"]
+        )
+
+        self.snapshot_manager = SnapshotManager(
+            self.config["logging"]["snapshot_dir"]
         )
 
     def load_model(self):
@@ -168,13 +174,38 @@ def main():
         detections = detector.detect_frame(frame)
 
         # Log detections
+        snapshot_threshold = detector.config[
+            "logging"
+        ]["snapshot_confidence_threshold"]
+
         for det in detections:
             x1, y1, x2, y2 = det["bbox"]
+
+            if det["confidence"] >= snapshot_threshold:
+
+                crop = frame[y1:y2, x1:x2]
+
+                snapshot_path = (
+                    detector.snapshot_manager.save_snapshot(
+                        crop,
+                        det["class_name"]
+                    )
+                )
+
+                print(
+                    f"[SNAPSHOT] Saved: "
+                    f"{snapshot_path}"
+                )
 
             detector.logger.log_detection(
                 det["class_name"],
                 det["confidence"],
-                (x1, y1, x2 - x1, y2 - y1)
+                (
+                    x1,
+                    y1,
+                    x2 - x1,
+                    y2 - y1
+                )
             )
 
         output_frame = detector.draw_results(frame, detections)
